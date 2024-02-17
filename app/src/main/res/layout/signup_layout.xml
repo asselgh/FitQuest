@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".SignupActivity">
+
+
+    <!--    textView for the app name-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="65dp"
+        android:text="FitQuest"
+        android:textColor="@color/title"
+        android:textSize="44dp"
+        android:textStyle="bold" />
+
+    <!--    input for the user full name-->
+    <EditText
+        android:id="@+id/edit_id1"
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/input_border"
+        android:elevation="5dp"
+        android:hint="Full Name"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+    <!--    input for the user email or phone number-->
+    <EditText
+        android:id="@+id/edit_id2"
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/input_border"
+        android:elevation="5dp"
+        android:hint="Email or Phone Number"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+    <!--    input for the user password-->
+    <EditText
+        android:id="@+id/edit_id3"
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/input_border"
+        android:elevation="5dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+    <!--    input for the user confirm password-->
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/input_border"
+        android:elevation="5dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+
+
+    <!--    Button for the signup  -->
+    <Button
+        android:id="@+id/signupBtn"
+        android:layout_width="150dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/primary"
+        android:text="SIGN UP"
+        android:textSize="20dp"
+        android:onClick="sendData"/>
+
+
+</LinearLayout>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".LoginActivity"
+    android:background="@color/background">
+
+<!--
+login page components
+1- app name at the top
+2- input for the user email or phone number
+3- input for the user password
+4- a separater that says OR then comes the buttons after it
+5- button for signin with google
+6- button for login
+7- check box for remember me
+-->
+
+    <!--    textView for the app name-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="65dp"
+        android:text="FitQuest"
+        android:textColor="@color/title"
+        android:textSize="44dp"
+        android:textStyle="bold" />
+
+    <!--    input for the user email or phone number-->
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/input_border"
+        android:elevation="5dp"
+        android:hint="Email or Phone Number"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+    <!--    input for the user password-->
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/input_border"
+        android:elevation="5dp"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+    <!--    a separater that says OR then comes the buttons after it-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:text="OR"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+    <!--    button for signin with google-->
+    <Button
+        android:id="@+id/googleBtn"
+        android:layout_width="220dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/google"
+        android:drawableStart="@drawable/googlelogo"
+        android:drawablePadding="15dp"
+        android:text="SIGN IN WITH GOOGLE"
+        android:textSize="20dp" />
+
+    <!--    button for login-->
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="220dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/primary"
+        android:text="LOG IN"
+        android:textSize="20dp" />
+
+    <!--    check box for remember me-->
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:text="Remember me"
+        android:textColor="@color/text"
+        android:textSize="20dp" />
+
+
+</LinearLayout>

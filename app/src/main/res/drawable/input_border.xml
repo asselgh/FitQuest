@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+<!--    inputs should have borders and have raduis of 8dp -->
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/background"/>
+            <corners android:radius="26dp"/>
+            <stroke android:color="@color/lightGrey" android:width="2dp"/>
+        </shape>
+    </item>
+
+</selector>
