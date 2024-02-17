@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginActivity"
-    android:background="@color/background">
+    tools:context=".LoginActivity">
 
     <!--    textView for the app name-->
     <TextView
@@ -51,29 +51,7 @@
         android:textSize="20dp" />
 
     <!--    a separater that says OR then comes the buttons after it-->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
-        android:text="OR"
-        android:textColor="@color/text"
-        android:textSize="20dp" />
 
-    <!--    button for signin with google-->
-    <Button
-        android:id="@+id/googleBtn"
-        android:layout_width="276dp"
-        android:layout_height="65dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/google"
-        android:drawableStart="@drawable/googlelogo"
-        android:drawablePadding="15dp"
-        android:text="SIGN IN WITH GOOGLE"
-        android:textSize="20dp" />
-
-    <!--    button for login-->
     <Button
         android:id="@+id/loginBtn"
         android:layout_width="266dp"
@@ -83,7 +61,30 @@
         android:text="LOG IN"
         android:textSize="20dp" />
 
-    <!--    check box for remember me-->
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:text="OR"
+        android:textColor="@color/text"
+        android:textSize="26dp" />
+
+    <Button
+        android:id="@+id/googleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:backgroundTint="@color/google"
+        android:drawableStart="@drawable/googlelogo"
+        android:drawablePadding="15dp"
+        android:text="SIGN IN WITH GOOGLE"
+        android:textSize="20dp" />
+
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
