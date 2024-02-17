@@ -9,17 +9,6 @@
     tools:context=".LoginActivity"
     android:background="@color/background">
 
-<!--
-login page components
-1- app name at the top
-2- input for the user email or phone number
-3- input for the user password
-4- a separater that says OR then comes the buttons after it
-5- button for signin with google
-6- button for login
-7- check box for remember me
--->
-
     <!--    textView for the app name-->
     <TextView
         android:layout_width="wrap_content"
@@ -74,7 +63,7 @@ login page components
     <!--    button for signin with google-->
     <Button
         android:id="@+id/googleBtn"
-        android:layout_width="220dp"
+        android:layout_width="276dp"
         android:layout_height="65dp"
         android:layout_gravity="center"
         android:layout_marginBottom="30dp"
@@ -87,7 +76,7 @@ login page components
     <!--    button for login-->
     <Button
         android:id="@+id/loginBtn"
-        android:layout_width="220dp"
+        android:layout_width="266dp"
         android:layout_height="65dp"
         android:layout_gravity="center"
         android:backgroundTint="@color/primary"
