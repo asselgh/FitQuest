@@ -65,27 +65,28 @@
 
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:text="OR"
-        android:textColor="@color/text"
-        android:textSize="26dp" />
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:layout_marginTop="16dp"-->
+<!--        android:text="OR"-->
+<!--        android:textColor="@color/text"-->
+<!--        android:textSize="26dp" />-->
 
-    <Button
-        android:id="@+id/googleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="61dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
-        android:backgroundTint="@color/google"
-        android:drawableStart="@drawable/googlelogo"
-        android:drawablePadding="15dp"
-        android:text="SIGN IN WITH GOOGLE"
-        android:textSize="20dp" />
+<!--&lt;!&ndash;    Signin with Google&ndash;&gt;-->
+<!--    <Button-->
+<!--        android:id="@+id/googleBtn"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="61dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:layout_marginBottom="30dp"-->
+<!--        android:backgroundTint="@color/google"-->
+<!--        android:drawableStart="@drawable/googlelogo"-->
+<!--        android:drawablePadding="15dp"-->
+<!--        android:text="SIGN IN WITH GOOGLE"-->
+<!--        android:textSize="20dp" />-->
 
     <CheckBox
         android:layout_width="wrap_content"
