@@ -1,5 +1,7 @@
 package com.example.fitquest;
 
+import android.annotation.SuppressLint;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +16,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import android.view.View;
+
 public class SignupActivity extends AppCompatActivity {
+
+    private DatabaseReference mDatabase;
 
     private FirebaseAuth mAuth;
     private EditText editText1, editText2, editText3;
@@ -28,11 +36,14 @@ public class SignupActivity extends AppCompatActivity {
         editText1 = findViewById(R.id.edit_id1);
         editText2 = findViewById(R.id.edit_id2);
         editText3 = findViewById(R.id.edit_id3);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public void sendData(View view) {
-        String email = editText2.getText().toString().trim();
-        String password = editText3.getText().toString().trim();
+        String email = editText2.getText().toString();
+        String password = editText3.getText().toString();
+        String name = editText1.getText().toString();
 
         // Validate email and password
         if (email.isEmpty() || password.isEmpty()) {
@@ -59,5 +70,14 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
+        writeNewUser();
+
+    }
+
+    public void writeNewUser() {
+        User user = new User(editText1.getText().toString(),
+                editText2.getText().toString(), editText3.getText().toString());
+
+        mDatabase.child("users").child(user.getName()).setValue(user);
     }
 }
