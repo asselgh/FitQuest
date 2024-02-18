@@ -33,6 +33,7 @@ login page components
 
     <!--    input for the user email or phone number-->
     <EditText
+        android:id="@+id/edit_email"
         android:layout_width="300dp"
         android:layout_height="65dp"
         android:layout_gravity="center"
@@ -48,6 +49,7 @@ login page components
 
     <!--    input for the user password-->
     <EditText
+        android:id="@+id/edit_password"
         android:layout_width="300dp"
         android:layout_height="65dp"
         android:layout_gravity="center"
