@@ -4,21 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginActivity"
-    android:background="@color/background">
-
-<!--
-login page components
-1- app name at the top
-2- input for the user email or phone number
-3- input for the user password
-4- a separater that says OR then comes the buttons after it
-5- button for signin with google
-6- button for login
-7- check box for remember me
--->
+    tools:context=".LoginActivity">
 
     <!--    textView for the app name-->
     <TextView
@@ -64,20 +53,32 @@ login page components
         android:textSize="20dp" />
 
     <!--    a separater that says OR then comes the buttons after it-->
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="266dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/primary"
+        android:text="LOG IN"
+        android:textSize="20dp" />
+
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
         android:text="OR"
         android:textColor="@color/text"
-        android:textSize="20dp" />
+        android:textSize="26dp" />
 
-    <!--    button for signin with google-->
     <Button
         android:id="@+id/googleBtn"
-        android:layout_width="220dp"
-        android:layout_height="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
         android:layout_gravity="center"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/google"
@@ -86,17 +87,6 @@ login page components
         android:text="SIGN IN WITH GOOGLE"
         android:textSize="20dp" />
 
-    <!--    button for login-->
-    <Button
-        android:id="@+id/loginBtn"
-        android:layout_width="220dp"
-        android:layout_height="65dp"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/primary"
-        android:text="LOG IN"
-        android:textSize="20dp" />
-
-    <!--    check box for remember me-->
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
