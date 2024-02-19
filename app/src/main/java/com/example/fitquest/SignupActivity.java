@@ -50,25 +50,33 @@ public class SignupActivity extends AppCompatActivity {
         String password = editText3.getText().toString();
         String passwordConfirm = editText4.getText().toString();
 
-        // Validate email and password
+        // Validate email, password, and Username
         if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
             Toast.makeText(this, "Please fill all the fields first", Toast.LENGTH_SHORT).show();
             return;
-        } else if (email.isEmpty() || password.isEmpty()) {
+        }
+        // Validate email and password
+        else if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Email and Password Cannot Be Empty", Toast.LENGTH_SHORT).show();
             return;
         }
-        //  checks if the email written correctlly
+        //  checks if the email written correctly
         else if (!email.contains("@") || !email.contains(".")) {
             Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();
             return;
-        } else if (password.length() < 6) {
+        }
+        // Validate the length of the password
+        else if (password.length() < 6) {
             Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
             return;
-        } else if (name.isEmpty()) {
+        }
+        // validate the the name
+        else if (name.isEmpty()) {
             Toast.makeText(this, "Name Cannot Be Empty", Toast.LENGTH_SHORT).show();
             return;
-        } else if (name.length() < 3) {
+        }
+        // validate the length of the name
+        else if (name.length() < 3) {
             Toast.makeText(this, "Name must be at least 3 characters", Toast.LENGTH_SHORT).show();
             return;
         }
