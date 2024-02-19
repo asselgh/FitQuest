@@ -39,14 +39,24 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (email.isEmpty() || password.isEmpty()) {
                     // Display a toast message if email or password is empty
-                    Toast.makeText(LoginActivity.this, "Email or password cannot be empty", Toast.LENGTH_SHORT).show();
-                } else {
+                    Toast.makeText(LoginActivity.this, "Email or password cannot be empty!", Toast.LENGTH_SHORT).show();
+                }
+                else if (!email.contains("@") || !email.contains(".")){
+                    // Display a toast message if email is not in the correct format
+                    Toast.makeText(LoginActivity.this, "Please enter a valid email!", Toast.LENGTH_SHORT).show();
+                }
+                else if(password.length() < 6){
+                    // Display a toast message if password is less than 6 characters
+                    Toast.makeText(LoginActivity.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
+                }
+                    else {
                     // If email and password are not empty, proceed with Firebase authentication
                     signInWithEmailAndPassword(email, password);
                 }
             }
         });
     }
+
 
     private void signInWithEmailAndPassword(String email, String password) {
         mAuth.signInWithEmailAndPassword(email, password)

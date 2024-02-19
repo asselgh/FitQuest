@@ -71,6 +71,7 @@
 
     <!--    input for the user confirm password-->
     <EditText
+        android:id="@+id/edit_id4"
         android:layout_width="300dp"
         android:layout_height="65dp"
         android:layout_gravity="center"

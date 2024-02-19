@@ -2,6 +2,7 @@ package com.example.fitquest;
 
 import android.annotation.SuppressLint;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 import android.view.View;
 
 public class SignupActivity extends AppCompatActivity {
@@ -25,7 +27,7 @@ public class SignupActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     private FirebaseAuth mAuth;
-    private EditText editText1, editText2, editText3;
+    private EditText editText1, editText2, editText3, editText4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,18 +38,43 @@ public class SignupActivity extends AppCompatActivity {
         editText1 = findViewById(R.id.edit_id1);
         editText2 = findViewById(R.id.edit_id2);
         editText3 = findViewById(R.id.edit_id3);
+        editText4 = findViewById(R.id.edit_id4);
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public void sendData(View view) {
+        String name = editText1.getText().toString();
         String email = editText2.getText().toString();
         String password = editText3.getText().toString();
-        String name = editText1.getText().toString();
+        String passwordConfirm = editText4.getText().toString();
 
         // Validate email and password
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Email or password cannot be empty", Toast.LENGTH_SHORT).show();
+        if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
+            Toast.makeText(this, "Please fill all the fields first", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Email and Password Cannot Be Empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //  checks if the email written correctlly
+        else if (!email.contains("@") || !email.contains(".")) {
+            Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (password.length() < 6) {
+            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (name.isEmpty()) {
+            Toast.makeText(this, "Name Cannot Be Empty", Toast.LENGTH_SHORT).show();
+            return;
+        } else if (name.length() < 3) {
+            Toast.makeText(this, "Name must be at least 3 characters", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //  checks if the password and the confirm password are the same
+        else if (!password.equals(passwordConfirm)) {
+            Toast.makeText(this, "Password and Confirm Password must be the same", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -61,6 +88,9 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Account created successfully.",
                                     Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(SignupActivity.this, MainActivity.class); //change this when we create the mainpage
+                            startActivity(intent);
+                            finish();
                             // Proceed to the next activity or perform any additional actions
                             // For example, you might want to redirect the user to the login page
                         } else {
