@@ -34,6 +34,31 @@
             android:name=".HomeActivity"
             android:exported="true" />
 
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".StatusActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".WorkoutActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".CyclingActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".RunningActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".WalkingActivity"
+            android:exported="true" />
+
+
 
     </application>
 

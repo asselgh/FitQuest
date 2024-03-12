@@ -218,6 +218,7 @@
 
 
             <ImageView
+                android:id="@+id/workoutImageView"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
                 android:layout_weight="1"
