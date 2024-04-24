@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StatusActivity"
+    android:padding="16dp">
+
+    <!-- Title at the top of the page -->
+    <TextView
+        android:id="@+id/tvStatusTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STATUS"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- Calories Section -->
+    <TextView
+        android:id="@+id/tvCaloriesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvStatusTitle"
+        android:text="Calories"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvCaloriesValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvCaloriesLabel"
+        android:text="You burned 123 calories today"/>
+
+
+    <ImageView
+        android:id="@+id/imgShareCalories"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@id/tvCaloriesValue"
+        android:layout_toRightOf="@id/tvCaloriesValue"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_share" />
+
+    /><!-- Ensure you have a share icon drawable -->
+
+    <!-- Milestones Section -->
+    <TextView
+        android:id="@+id/tvMilestonesLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgShareCalories"
+        android:text="Milestones"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvMilestonesValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvMilestonesLabel"
+        android:text="Your milestones text here"/>
+
+    <ImageView
+        android:id="@+id/imgShareMilestones"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@id/tvMilestonesValue"
+        android:layout_toRightOf="@id/tvMilestonesValue"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_share"/>
+
+    <!-- Distance Section -->
+    <TextView
+        android:id="@+id/tvDistanceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgShareMilestones"
+        android:text="Distance"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/tvDistanceValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvDistanceLabel"
+        android:text="Your distance text here"/>
+
+    <ImageView
+        android:id="@+id/imgShareDistance"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@id/tvDistanceValue"
+        android:layout_toRightOf="@id/tvDistanceValue"
+        android:layout_marginLeft="10dp"
+        android:src="@drawable/ic_share"/>
+
+    <!-- Activity Section -->
+    <TextView
+        android:id="@+id/tvActivityLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgShareDistance"
+        android:text="Activity"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"/>
+
+    <!-- User activity options: day, week, month, year -->
+    <RadioGroup
+        android:id="@+id/rgActivityOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvActivityLabel"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Day"/>
+
+        <RadioButton
+            android:id="@+id/rbWeek"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Week"/>
+
+        <RadioButton
+            android:id="@+id/rbMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Month"/>
+
+        <RadioButton
+            android:id="@+id/rbYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Year"/>
+    </RadioGroup>
+</RelativeLayout>

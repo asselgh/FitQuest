@@ -25,6 +25,17 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        // Handle click on StatsImageView
+        ImageView statsImageView = findViewById(R.id.statusImageView);
+        statsImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Navigate to the StatsActivity when the statsImageView is clicked
+                Intent intent = new Intent(HomeActivity.this, StatusActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 

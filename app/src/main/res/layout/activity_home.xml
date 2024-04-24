@@ -4,27 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+
     android:orientation="vertical"
     tools:context=".HomeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="18dp"
+                android:shadowColor="#000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
                 android:text="Home"
-                android:textColor="@color/title"
+                android:textColor="#1565C0"
                 android:textSize="30sp" />
 
             <TextView
@@ -32,9 +38,8 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
                 android:text="welcome back, {User name}"
-                android:textColor="@color/title"
-                android:textSize="12sp" />
-
+                android:textColor="#444"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <ImageView
@@ -42,17 +47,21 @@
             android:layout_height="74dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="profile image"
+            android:elevation="4dp"
             android:src="@drawable/profile" />
 
     </LinearLayout>
 
-    <!--    dashboard to view the daily status and the rewards-->
+    <!-- Dashboard for daily status and rewards -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:elevation="4dp"
         android:orientation="horizontal"
         android:padding="10dp">
 
+        <!-- Daily Status -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -64,18 +73,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Daily Status"
-                android:textColor="@color/title"
+                android:textColor="#1565C0"
                 android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="You have completed 3 out of 5 tasks today"
-                android:textColor="@color/title"
-                android:textSize="12sp" />
-
+                android:textColor="#666"
+                android:textSize="14sp" />
         </LinearLayout>
 
+        <!-- Rewards -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -87,25 +96,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rewards"
-                android:textColor="@color/title"
+                android:textColor="#1565C0"
                 android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="You have earned 100 points today"
-                android:textColor="@color/title"
-                android:textSize="12sp" />
-
+                android:textColor="#666"
+                android:textSize="14sp" />
         </LinearLayout>
-
     </LinearLayout>
 
-
-    <!--dashboard to show the next goals, it should have the steps, time, and calories left-->
+    <!-- Next Goals Dashboard -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#FFF"
+        android:elevation="4dp"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -113,15 +121,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next Goals"
-            android:textColor="@color/title"
+            android:textColor="#1565C0"
             android:textSize="20sp" />
 
+        <!-- Goals Details -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="10dp">
 
+            <!-- Steps -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -133,18 +143,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Steps"
-                    android:textColor="@color/title"
+                    android:textColor="#1565C0"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 1000 steps left"
-                    android:textColor="@color/title"
-                    android:textSize="12sp" />
-
+                    android:textColor="#666"
+                    android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Time -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -156,18 +166,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Time"
-                    android:textColor="@color/title"
+                    android:textColor="#1565C0"
                     android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 2 hours left"
-                    android:textColor="@color/title"
-                    android:textSize="12sp" />
-
+                    android:textColor="#666"
+                    android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Calories -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -180,7 +190,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="Calories"
-                    android:textColor="@color/title"
+                    android:textColor="#1565C0"
                     android:textSize="20sp" />
 
                 <TextView
@@ -188,34 +198,33 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="You have 200 calories left"
-                    android:textColor="@color/title"
-                    android:textSize="12sp" />
-
+                    android:textColor="#666"
+                    android:textSize="14sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <!--    navigation bar that have the following buttons from left to right, home, workout, status, profile-->
+    <!-- Navigation Bar -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Your main content here -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
+            android:background="#EEE"
+            android:elevation="6dp"
+            android:orientation="horizontal"
             android:padding="10dp">
 
+            <!-- Navigation Icons -->
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="54dp"
                 android:layout_weight="1"
                 android:contentDescription="home icon"
                 android:src="@drawable/homeicon" />
-
 
             <ImageView
                 android:id="@+id/workoutImageView"
@@ -226,6 +235,7 @@
                 android:src="@drawable/workouticon" />
 
             <ImageView
+                android:id="@+id/statusImageView"
                 android:layout_width="0dp"
                 android:layout_height="54dp"
                 android:layout_weight="1"
@@ -238,11 +248,6 @@
                 android:layout_weight="1"
                 android:contentDescription="profile icon"
                 android:src="@drawable/profileicon" />
-
         </LinearLayout>
-
     </RelativeLayout>
-
-
-
 </LinearLayout>

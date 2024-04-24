@@ -51,7 +51,7 @@
 
     <!-- Button to start/pause/end workout -->
     <Button
-        android:id="@+id/startPauseButton"
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
