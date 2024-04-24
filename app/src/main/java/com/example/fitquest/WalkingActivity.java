@@ -35,6 +35,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walking);
 
+        // Initialize UI elements
         stepCountTextView = findViewById(R.id.stepsTextView);
         timerTextView = findViewById(R.id.timerTextView);
         distanceTextView = findViewById(R.id.distanceTextView);
@@ -43,17 +44,22 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
 
+        // Get sensor manager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 
+        // Request permission to access activity recognition
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, ACTIVITY_RECOGNITION_PERMISSION);
         } else {
+            // If permission granted, initialize step counter
             initStepCounter();
         }
 
+        // Set click listeners for buttons
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Start step sensor and timer
                 registerStepSensor();
                 startTime = SystemClock.elapsedRealtime() - elapsedTime;
                 timerHandler.postDelayed(updateTimerThread, 0);
@@ -67,6 +73,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Pause timer
                 elapsedTime = SystemClock.elapsedRealtime() - startTime;
                 timerHandler.removeCallbacks(updateTimerThread);
                 isRunning = false;
@@ -78,6 +85,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         endButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Stop sensor and timer, reset UI
                 timerHandler.removeCallbacks(updateTimerThread);
                 sensorManager.unregisterListener(WalkingActivity.this);
                 elapsedTime = 0;
@@ -94,6 +102,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     }
 
     private void initStepCounter() {
+        // Check if step counter sensor is available
         Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (stepSensor != null) {
             isSensorPresent = true;
@@ -104,6 +113,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     }
 
     private void registerStepSensor() {
+        // Register step sensor listener
         if (isSensorPresent) {
             Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
             boolean sensorRegistered = sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI);
@@ -117,6 +127,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        // Update step count and distance when sensor data changes
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
             if (stepsCounted == 0) {
                 stepsCounted = event.values[0];
@@ -128,6 +139,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     }
 
     private void updateDistance(int steps) {
+        // Update distance based on step count
         float distance = steps * STEP_LENGTH;  // Calculate distance
         distanceTextView.setText("Distance: " + (int) distance + " m");
     }
@@ -139,6 +151,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        // Handle permission request result
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == ACTIVITY_RECOGNITION_PERMISSION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -150,6 +163,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     }
 
     private Runnable updateTimerThread = new Runnable() {
+        // Update timer display
         public void run() {
             if (isRunning) {
                 long now = SystemClock.elapsedRealtime();
@@ -167,6 +181,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
     @Override
     protected void onPause() {
+        // Pause sensor and timer when activity is paused
         super.onPause();
         if (isSensorPresent) {
             sensorManager.unregisterListener(this);
@@ -176,13 +191,14 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
             timerHandler.removeCallbacks(updateTimerThread);
         }
     }
+
     @Override
     protected void onResume() {
+        // Resume sensor and timer when activity is resumed
         super.onResume();
         if (isRunning) {
             startTime = SystemClock.elapsedRealtime() - elapsedTime;
             timerHandler.postDelayed(updateTimerThread, 0);
         }
     }
-
 }
