@@ -29,15 +29,6 @@
         android:text="Distance: 0 km"
         android:textSize="18sp" />
 
-    <!--    steps-->
-    <TextView
-        android:id="@+id/stepsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:padding="8dp"
-        android:text="Steps: 0"
-        android:textSize="18sp" />
 
     <!-- Calories Burned -->
     <TextView

@@ -1,16 +1,162 @@
 package com.example.fitquest;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-public class RunningActivity extends AppCompatActivity {
+public class RunningActivity extends AppCompatActivity implements SensorEventListener {
+    private SensorManager sensorManager;
+    private TextView stepCountTextView, timerTextView, distanceTextView, caloriesTextView;
+    private Button startPauseButton, pauseButton, endButton;
+    private Handler timerHandler = new Handler();
+    private long startTime = 0;
+    private long elapsedTime = 0;
+    private boolean isRunning = false;
+    private float stepsCounted = 0;
+    private static final float STEP_LENGTH = 0.762f; // Average step length in meters
+    private static final float CALORIES_PER_STEP = 0.07f; // Adjusted calorie burn rate per step for running
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_running);
 
-        // Your code for CyclingActivity initialization, UI setup, etc. goes here
+        // Initialize UI elements
+        stepCountTextView = findViewById(R.id.stepsTextView);
+        timerTextView = findViewById(R.id.timerTextView);
+        distanceTextView = findViewById(R.id.distanceTextView);
+        caloriesTextView = findViewById(R.id.caloriesTextView);
+        startPauseButton = findViewById(R.id.startPauseButton);
+        pauseButton = findViewById(R.id.pauseButton);
+        endButton = findViewById(R.id.endButton);
+
+        // Get sensor manager
+        sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+
+        // Check step sensor availability
+        if (stepSensor == null) {
+            Toast.makeText(this, "Step sensor is not available!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Set click listeners for buttons
+        startPauseButton.setOnClickListener(v -> {
+            if (!isRunning) {
+                // Start step sensor and timer
+                sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI);
+                startTime = SystemClock.elapsedRealtime() - elapsedTime;
+                timerHandler.postDelayed(updateTimerThread, 0);
+                isRunning = true;
+                startPauseButton.setVisibility(View.GONE);
+                pauseButton.setVisibility(View.VISIBLE);
+                endButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        pauseButton.setOnClickListener(v -> {
+            // Pause timer and sensor
+            elapsedTime = SystemClock.elapsedRealtime() - startTime;
+            timerHandler.removeCallbacks(updateTimerThread);
+            sensorManager.unregisterListener(this);
+            isRunning = false;
+            pauseButton.setVisibility(View.GONE);
+            startPauseButton.setVisibility(View.VISIBLE);
+        });
+
+        endButton.setOnClickListener(v -> {
+            // Stop sensor and timer, reset UI
+            sensorManager.unregisterListener(this);
+            timerHandler.removeCallbacks(updateTimerThread);
+            resetUI();
+        });
+    }
+
+    private void resetUI() {
+        elapsedTime = 0;
+        stepsCounted = 0;
+        timerTextView.setText("00:00:00");
+        stepCountTextView.setText("Steps: 0");
+        distanceTextView.setText("Distance: 0 km");
+        caloriesTextView.setText("Calories Burned: 0 kcal");
+        isRunning = false;
+        startPauseButton.setVisibility(View.VISIBLE);
+        pauseButton.setVisibility(View.GONE);
+        endButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
+            if (stepsCounted == 0) {
+                stepsCounted = event.values[0];
+            }
+            float steps = event.values[0] - stepsCounted;
+            stepCountTextView.setText("Steps: " + (int) steps);
+            updateDistanceAndCalories((int) steps);
+        }
+    }
+
+    private void updateDistanceAndCalories(int steps) {
+        float distance = steps * STEP_LENGTH / 1000; // Distance in kilometers
+        distanceTextView.setText("Distance: " + String.format("%.2f", distance) + " km");
+        float caloriesBurned = steps * CALORIES_PER_STEP;
+        caloriesTextView.setText("Calories Burned: " + String.format("%.1f", caloriesBurned) + " kcal");
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // This method is required by the SensorEventListener interface; can be left empty if not used.
+    }
+
+    private Runnable updateTimerThread = new Runnable() {
+        @Override
+        public void run() {
+            if (isRunning) {
+                long now = SystemClock.elapsedRealtime();
+                long millis = now - startTime;
+                int seconds = (int) (millis / 1000);
+                int minutes = seconds / 60;
+                seconds %= 60;
+                int hours = minutes / 60;
+                minutes %= 60;
+                timerTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+                timerHandler.postDelayed(this, 500);
+            }
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (isRunning) {
+            sensorManager.unregisterListener(this);
+            elapsedTime = SystemClock.elapsedRealtime() - startTime;
+            timerHandler.removeCallbacks(updateTimerThread);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isRunning) {
+            sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER), SensorManager.SENSOR_DELAY_UI);
+            startTime = SystemClock.elapsedRealtime() - elapsedTime;
+            timerHandler.postDelayed(updateTimerThread, 0);
+        }
     }
 }

@@ -13,6 +13,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -29,6 +30,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     private float stepsCounted = 0;
     private static final int ACTIVITY_RECOGNITION_PERMISSION = 1;
     private static final float STEP_LENGTH = 0.762f;  // Average step length in meters
+    private static final float AVERAGE_WEIGHT_KG = 70.0f; // Average weight in kg for calorie calculation
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
                 timerTextView.setText("00:00:00");
                 stepCountTextView.setText("Steps: 0");
                 distanceTextView.setText("Distance: 0 m");
+                caloriesTextView.setText("Calories Burned: 0 kcal");
                 isRunning = false;
                 startButton.setVisibility(View.VISIBLE);
                 pauseButton.setVisibility(View.GONE);
@@ -135,6 +138,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
             float steps = event.values[0] - stepsCounted;
             stepCountTextView.setText("Steps: " + (int) steps);
             updateDistance((int) steps);
+            updateCalories((int) steps);
         }
     }
 
@@ -142,6 +146,12 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         // Update distance based on step count
         float distance = steps * STEP_LENGTH;  // Calculate distance
         distanceTextView.setText("Distance: " + (int) distance + " m");
+    }
+
+    private void updateCalories(int steps) {
+        // Calculate and update calories burned
+        float caloriesBurned = steps * 0.04f;  // Simple estimation: 0.04 calories per step
+        caloriesTextView.setText("Calories Burned: " + String.format("%.1f", caloriesBurned) + " kcal");
     }
 
     @Override
@@ -163,21 +173,22 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     }
 
     private Runnable updateTimerThread = new Runnable() {
-        // Update timer display
+        @Override
         public void run() {
             if (isRunning) {
                 long now = SystemClock.elapsedRealtime();
                 long millis = now - startTime;
                 int seconds = (int) (millis / 1000);
                 int minutes = seconds / 60;
-                seconds = seconds % 60;
+                seconds %= 60;
                 int hours = minutes / 60;
-                minutes = minutes % 60;
+                minutes %= 60;
                 timerTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-                timerHandler.postDelayed(this, 500);
+                timerHandler.postDelayed(this, 500); // Corrected line here
             }
         }
     };
+
 
     @Override
     protected void onPause() {
@@ -201,4 +212,5 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
             timerHandler.postDelayed(updateTimerThread, 0);
         }
     }
+
 }
