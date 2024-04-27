@@ -58,124 +58,30 @@
             android:orientation="vertical"
             android:padding="10dp">
 
-            <!--Cycling CardView-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/cycling_image"
-                            android:scaleType="centerInside" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:text="Cycling"
-                            android:textColor="@color/title"
-                            android:textSize="20sp" />
-
-                        <Button
-                            android:id="@+id/startCyclingBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@color/secondary"
-                            android:text="Start"
-                            android:textColor="@color/primary" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-            <!--Running CardView-->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="5dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/running_image"
-                            android:scaleType="centerInside" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="10dp"
-                            android:text="Running"
-                            android:textColor="@color/title"
-                            android:textSize="20sp" />
-
-                        <Button
-                            android:id="@+id/startRunningBtn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:background="@color/secondary"
-                            android:text="Start"
-                            android:textColor="@color/primary" />
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
 
             <!--Walking CardView-->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_margin="10dp"
                 android:padding="10dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="5dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_width="300dp"
+                            android:layout_height="200dp"
                             android:src="@drawable/walking_image"
                             android:scaleType="centerInside" />
 
@@ -192,15 +98,116 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:background="@color/secondary"
+                            android:backgroundTint="@color/accent"
                             android:text="Start"
-                            android:textColor="@color/primary" />
+                            android:textColor="#fff" />
 
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
             </LinearLayout>
+
+            <!--Running CardView-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="10dp"
+                android:padding="10dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="300dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/running_image"
+
+                            android:scaleType="centerInside" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="Running"
+                            android:textColor="@color/title"
+                            android:textSize="20sp" />
+
+                        <Button
+                            android:id="@+id/startRunningBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="@color/accent"
+                            android:text="Start"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+
+            <!--Cycling CardView-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp"
+                android:padding="10dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="300dp"
+                            android:layout_height="200dp"
+                            android:src="@drawable/cycling_image"
+                            android:scaleType="centerInside" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="Cycling"
+                            android:textColor="@color/title"
+                            android:textSize="20sp" />
+
+                        <Button
+                            android:id="@+id/startCyclingBtn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:backgroundTint="@color/accent"
+                            android:text="Start"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

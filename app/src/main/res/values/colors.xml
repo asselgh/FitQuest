@@ -9,4 +9,12 @@
     <color name="title">#003F5F</color>
     <color name="google">#DB4437</color>
 
+
+    <color name="newText">#0c0b1e</color>
+    <color name="newBackground">#f1f0fb</color>
+    <color name="newPrimary">#3228db</color>
+    <color name="newSecondary">#7d76f3</color>
+    <color name="newAccent">#4438fb</color>
+
+
 </resources>
