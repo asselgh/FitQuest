@@ -11,16 +11,18 @@
 
 
     <!--Header Section-->
+
+    <!-- Timer -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="16dp"
-        android:text="Walking"
+        android:textStyle="bold"
+        android:text="W A L K I N G"
         android:textColor="@color/title"
         android:textSize="40sp" />
 
-    <!-- Timer -->
     <TextView
         android:id="@+id/timerTextView"
         android:layout_width="wrap_content"

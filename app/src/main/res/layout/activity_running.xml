@@ -14,8 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:textStyle="bold"
         android:padding="16dp"
-        android:text="Running"
+        android:text="R U N N I N G"
         android:textColor="@color/title"
         android:textSize="40sp" />
 
