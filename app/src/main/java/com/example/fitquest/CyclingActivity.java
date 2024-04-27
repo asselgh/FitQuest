@@ -40,7 +40,8 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         timerTextView = findViewById(R.id.timerTextView);
         distanceTextView = findViewById(R.id.distanceTextView);
         caloriesTextView = findViewById(R.id.caloriesTextView);
-        startPauseButton = findViewById(R.id.startPauseButton);
+        startPauseButton = findViewById(R.id
+                .startPauseButton);
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
 
