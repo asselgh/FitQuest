@@ -2,10 +2,10 @@ package com.example.fitquest;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -14,30 +14,29 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        // Handle click on workoutImageView
-        ImageView workoutImageView = findViewById(R.id.workoutImageView);
-        workoutImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to the WorkoutActivity when the workoutImageView is clicked
-                Intent intent = new Intent(HomeActivity.this, WorkoutActivity.class);
-                startActivity(intent);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                // Currently in Home, no action needed
+                return true;
+            } else if (itemId == R.id.navigation_workout) {
+                // Navigate to the WorkoutActivity
+                startActivity(new Intent(HomeActivity.this, WorkoutActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_status) {
+                // Navigate to the StatusActivity
+                startActivity(new Intent(HomeActivity.this, StatusActivity.class));
+                return true;
+            } else if (itemId == R.id.navigation_profile) {
+                // Navigate to the ProfileActivity
+                startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+                return true;
             }
+            return false;
         });
 
-        // Handle click on StatsImageView
-        ImageView statsImageView = findViewById(R.id.statusImageView);
-        statsImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Navigate to the StatsActivity when the statsImageView is clicked
-                Intent intent = new Intent(HomeActivity.this, StatusActivity.class);
-                startActivity(intent);
-            }
-        });
-
-
+        // Set the default selected item (if necessary)
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
-
-
 }

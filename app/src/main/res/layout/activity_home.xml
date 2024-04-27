@@ -209,45 +209,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:background="#EEE"
-            android:elevation="6dp"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <!-- Navigation Icons -->
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_weight="1"
-                android:contentDescription="home icon"
-                android:src="@drawable/homeicon" />
-
-            <ImageView
-                android:id="@+id/workoutImageView"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_weight="1"
-                android:contentDescription="workout icon"
-                android:src="@drawable/workouticon" />
-
-            <ImageView
-                android:id="@+id/statusImageView"
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_weight="1"
-                android:contentDescription="status icon"
-                android:src="@drawable/statusicon" />
-
-            <ImageView
-                android:layout_width="0dp"
-                android:layout_height="54dp"
-                android:layout_weight="1"
-                android:contentDescription="profile icon"
-                android:src="@drawable/profileicon" />
-        </LinearLayout>
+            app:menu="@menu/bottom_nav_menu" />
     </RelativeLayout>
 </LinearLayout>
