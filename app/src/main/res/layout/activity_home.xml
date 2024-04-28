@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:background="#fff"
     android:orientation="vertical"
     tools:context=".HomeActivity">
 
@@ -29,7 +29,7 @@
                 android:shadowDx="1"
                 android:shadowDy="1"
                 android:shadowRadius="2"
-                android:text="Home"
+                android:text="FitQuest"
                 android:textColor="#1565C0"
                 android:textSize="30sp" />
 
@@ -56,22 +56,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#09507f"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/background"
         android:elevation="4dp"
         android:orientation="horizontal"
-        android:layout_marginTop="80dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:padding="10dp">
 
         <!-- Daily Status -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="#fff"
             android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
@@ -84,19 +84,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textAlignment="center"
                 android:text="You have completed 3 out of 5 tasks today"
                 android:textColor="#666"
-                android:textSize="14sp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <!-- Rewards -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:background="#fff"
             android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
@@ -109,117 +111,104 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:text="You have earned 100 points today"
+                android:textAlignment="center"
                 android:textColor="#666"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Next Goals Dashboard -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#09507f"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/background"
         android:elevation="4dp"
         android:orientation="vertical"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
-        android:padding="10dp"
-        android:layout_marginTop="80dp"
-        >
+        android:padding="10dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Next Goals"
-            android:textColor="#fff"
-            android:textSize="20sp" />
+            android:textColor="#1565C0"
+            android:textSize="22sp" />
 
-        <!-- Goals Details -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
 
-            <!-- Steps -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_margin="10dp"
-                android:background="#fff"
-                android:padding="10dp">
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:layout_margin="10dp"
+                    android:padding="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Steps"
                     android:textColor="#1565C0"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 1000 steps left"
                     android:textColor="#666"
+                    android:padding="10dp"
                     android:textSize="14sp" />
-            </LinearLayout>
-
-            <!-- Time -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_margin="10dp"
-                android:background="#fff"
-                android:padding="10dp">
-
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:layout_margin="10dp"
+                    android:padding="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Time"
                     android:textColor="#1565C0"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 2 hours left"
                     android:textColor="#666"
+                    android:padding="10dp"
                     android:textSize="14sp" />
-            </LinearLayout>
+                </LinearLayout>
 
-            <!-- Calories -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_margin="10dp"
-                android:background="#fff"
-                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fff"
+                    android:layout_margin="10dp"
+                    android:padding="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:text="Calories"
                     android:textColor="#1565C0"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:text="You have 200 calories left"
                     android:textColor="#666"
+                    android:padding="10dp"
                     android:textSize="14sp" />
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
+
+
+
 
     <!-- Navigation Bar -->
     <RelativeLayout
@@ -235,3 +224,4 @@
             app:menu="@menu/bottom_nav_menu" />
     </RelativeLayout>
 </LinearLayout>
+
