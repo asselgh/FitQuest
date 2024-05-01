@@ -62,24 +62,13 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Wrong Password!", Toast.LENGTH_SHORT).show();
                 } else {
                     // If email and password are not empty, proceed with Firebase authentication
-                    signInWithEmailAndPassword(email, password);
-                    // Store credentials if remember me is checked
-                    if (rememberMe) {
-                        sharedPreferences.edit().putString("email", email).apply();
-                        sharedPreferences.edit().putString("password", password).apply();
-                        sharedPreferences.edit().putBoolean("rememberMe", true).apply(); // Add this line
-                    } else {
-                        // Clear stored credentials if remember me is unchecked
-                        sharedPreferences.edit().remove("email").apply();
-                        sharedPreferences.edit().remove("password").apply();
-                        sharedPreferences.edit().putBoolean("rememberMe", false).apply(); // Add this line
-                    }
+                    signInWithEmailAndPassword(email, password, rememberMe);
                 }
             }
         });
     }
 
-    private void signInWithEmailAndPassword(String email, String password) {
+    private void signInWithEmailAndPassword(String email, String password, final boolean rememberMe) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -89,10 +78,27 @@ public class LoginActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, "Authentication success.",
                                     Toast.LENGTH_SHORT).show();
-                            // Proceed to the next activity
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class); //change this when we create the mainpage
+                            // Proceed to the next activity with user email
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("user_email", email);
                             startActivity(intent);
                             finish();
+
+                            // Store credentials if remember me is checked
+                            if (rememberMe) {
+                                sharedPreferences.edit().putString("email", email).apply();
+                                sharedPreferences.edit().putString("password", password).apply();
+                                sharedPreferences.edit().putBoolean("rememberMe", true).apply(); // Add this line
+                            } else {
+                                // Clear stored credentials if remember me is unchecked
+                                sharedPreferences.edit().remove("email").apply();
+                                sharedPreferences.edit().remove("password").apply();
+                                sharedPreferences.edit().putBoolean("rememberMe", false).apply(); // Add this line
+                            }
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
