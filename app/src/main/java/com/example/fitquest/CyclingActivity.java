@@ -1,6 +1,7 @@
 package com.example.fitquest;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,7 +21,7 @@ import androidx.core.content.ContextCompat;
 public class CyclingActivity extends AppCompatActivity implements LocationListener {
 
     private TextView timerTextView, distanceTextView, caloriesTextView;
-    private Button startPauseButton, pauseButton, endButton;
+    private Button startPauseButton, pauseButton, endButton, finishButton;
     private LocationManager locationManager;
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
@@ -40,10 +41,10 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         timerTextView = findViewById(R.id.timerTextView);
         distanceTextView = findViewById(R.id.distanceTextView);
         caloriesTextView = findViewById(R.id.caloriesTextView);
-        startPauseButton = findViewById(R.id
-                .startPauseButton);
+        startPauseButton = findViewById(R.id.startPauseButton);
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
+        finishButton = findViewById(R.id.finishButton);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
@@ -77,6 +78,21 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
                 }
             }
         };
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an intent to start ResultsActivity
+                Intent intent = new Intent(CyclingActivity.this, ResultsActivity.class);
+                intent.putExtra("Duration", timerTextView.getText().toString());
+                intent.putExtra("Calories", caloriesTextView.getText().toString());
+                intent.putExtra("Distance", distanceTextView.getText().toString());
+                startActivity(intent);
+
+                // Optionally finish the current activity if you no longer need it
+                finish();
+            }
+        });
     }
 
     private void checkLocationPermission() {
@@ -92,6 +108,7 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         startPauseButton.setVisibility(View.GONE);
         pauseButton.setVisibility(View.VISIBLE);
         endButton.setVisibility(View.VISIBLE);
+        finishButton.setVisibility(View.VISIBLE);
         startTime = SystemClock.elapsedRealtime();
         timerHandler.postDelayed(timerRunnable, 0);
         lastLocation = null;
@@ -119,6 +136,7 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         startPauseButton.setVisibility(View.VISIBLE);
         pauseButton.setVisibility(View.GONE);
         endButton.setVisibility(View.GONE);
+        finishButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -138,13 +156,16 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
     }
 
     @Override
-    public void onProviderEnabled(String provider) {}
+    public void onProviderEnabled(String provider) {
+    }
 
     @Override
-    public void onProviderDisabled(String provider) {}
+    public void onProviderDisabled(String provider) {
+    }
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {

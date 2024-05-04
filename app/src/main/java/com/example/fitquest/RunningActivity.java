@@ -1,6 +1,7 @@
 package com.example.fitquest;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -21,7 +22,7 @@ import androidx.core.content.ContextCompat;
 public class RunningActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
     private TextView stepCountTextView, timerTextView, distanceTextView, caloriesTextView;
-    private Button startPauseButton, pauseButton, endButton;
+    private Button startPauseButton, pauseButton, endButton, finishButton;
     private Handler timerHandler = new Handler();
     private long startTime = 0;
     private long elapsedTime = 0;
@@ -43,6 +44,7 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
         startPauseButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
+        finishButton = findViewById(R.id.finishButton);
 
         // Get sensor manager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -65,6 +67,7 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
                 startPauseButton.setVisibility(View.GONE);
                 pauseButton.setVisibility(View.VISIBLE);
                 endButton.setVisibility(View.VISIBLE);
+                finishButton.setVisibility(View.VISIBLE);
             }
         });
 
@@ -84,6 +87,22 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
             timerHandler.removeCallbacks(updateTimerThread);
             resetUI();
         });
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an intent to start ResultsActivity
+                Intent intent = new Intent(RunningActivity.this, ResultsActivity.class);
+                intent.putExtra("Duration", timerTextView.getText().toString());
+                intent.putExtra("Steps", stepCountTextView.getText().toString());
+                intent.putExtra("Calories", caloriesTextView.getText().toString());
+                intent.putExtra("Distance", distanceTextView.getText().toString());
+                startActivity(intent);
+
+                // Optionally finish the current activity if you no longer need it
+                finish();
+            }
+        });
     }
 
     private void resetUI() {
@@ -97,6 +116,7 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
         startPauseButton.setVisibility(View.VISIBLE);
         pauseButton.setVisibility(View.GONE);
         endButton.setVisibility(View.GONE);
+        finishButton.setVisibility(View.VISIBLE);
     }
 
     @Override

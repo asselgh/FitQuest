@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:orientation="vertical"
+    tools:context=".ResultsActivity">
+
+
+    <!--    TextView durationTextView = findViewById(R.id.durationTextView);-->
+    <!--    TextView stepsTextView = findViewById(R.id.stepsTextView);-->
+    <!--    TextView caloriesTextView = findViewById(R.id.caloriesTextView);-->
+    <!--    TextView distanceTextView = findViewById(R.id.distanceTextView);-->
+
+    <!--Header Section-->
+
+    <!-- Timer -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="16dp"
+        android:text="R E S U L T S"
+        android:textColor="@color/title"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/durationTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:gravity="center_horizontal"
+        android:padding="16dp"
+        android:text="Duration: 00:00:00"
+        android:textColor="@color/title"
+        android:textSize="30sp" />
+
+    <!-- Distance -->
+    <TextView
+        android:id="@+id/distanceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="Distance: 0 km"
+        android:textColor="@color/title"
+        android:textSize="23sp" />
+
+
+    <!--    calories-->
+    <TextView
+        android:id="@+id/caloriesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="Calories: 0"
+        android:textColor="@color/title"
+        android:textSize="23sp" />
+
+
+    <!--    steps-->
+    <TextView
+        android:id="@+id/stepsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:padding="8dp"
+        android:text="Steps: 0"
+        android:textColor="@color/title"
+        android:textSize="23sp" />
+</LinearLayout>

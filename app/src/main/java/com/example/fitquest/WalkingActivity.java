@@ -1,7 +1,10 @@
 package com.example.fitquest;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
+import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -9,167 +12,180 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 public class WalkingActivity extends AppCompatActivity implements SensorEventListener {
     private SensorManager sensorManager;
+    private Sensor stepCounterSensor, accelerometerSensor;
     private TextView stepCountTextView, timerTextView, distanceTextView, caloriesTextView;
-    private Button startButton, pauseButton, endButton;
+    private Button startPauseButton, pauseButton, endButton, finishButton;
     private Handler timerHandler = new Handler();
     private long startTime = 0;
     private long elapsedTime = 0;
     private boolean isRunning = false;
-    private boolean isSensorPresent = false;
     private float stepsCounted = 0;
-    private static final int ACTIVITY_RECOGNITION_PERMISSION = 1;
-    private static final float STEP_LENGTH = 0.762f;  // Average step length in meters
-    private static final float AVERAGE_WEIGHT_KG = 70.0f; // Average weight in kg for calorie calculation
+    private float lastX, lastY, lastZ;
+    private static final float STEP_THRESHOLD = 10.0f; // Threshold for step detection
+    private static final float STEP_LENGTH = 0.762f; // Average step length in meters
+    private static final float CALORIES_PER_STEP = 0.04f; // Calorie burn rate per step
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walking);
 
-        // Initialize UI elements
         stepCountTextView = findViewById(R.id.stepsTextView);
         timerTextView = findViewById(R.id.timerTextView);
         distanceTextView = findViewById(R.id.distanceTextView);
         caloriesTextView = findViewById(R.id.caloriesTextView);
-        startButton = findViewById(R.id.startButton);
+        startPauseButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
+        finishButton = findViewById(R.id.finishButton);
 
-        // Get sensor manager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        // Request permission to access activity recognition
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, ACTIVITY_RECOGNITION_PERMISSION);
-        } else {
-            // If permission granted, initialize step counter
-            initStepCounter();
+        if (stepCounterSensor == null || accelerometerSensor == null) {
+            Toast.makeText(this, "Required sensors are not available!", Toast.LENGTH_SHORT).show();
+            finish(); // Close the activity if the sensors are not available
         }
 
-        // Set click listeners for buttons
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Start step sensor and timer
-                registerStepSensor();
-                startTime = SystemClock.elapsedRealtime() - elapsedTime;
-                timerHandler.postDelayed(updateTimerThread, 0);
-                isRunning = true;
-                startButton.setVisibility(View.GONE);
-                pauseButton.setVisibility(View.VISIBLE);
-                endButton.setVisibility(View.VISIBLE);
+        setButtonListeners();
+    }
+
+    private void setButtonListeners() {
+        startPauseButton.setOnClickListener(v -> {
+            if (!isRunning) {
+                startSensors();
+                startTimer();
+                switchButtons(true);
             }
         });
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Pause timer
-                elapsedTime = SystemClock.elapsedRealtime() - startTime;
-                timerHandler.removeCallbacks(updateTimerThread);
-                isRunning = false;
-                pauseButton.setVisibility(View.GONE);
-                startButton.setVisibility(View.VISIBLE);
-            }
+        pauseButton.setOnClickListener(v -> {
+            stopSensors();
+            stopTimer();
+            switchButtons(false);
         });
 
-        endButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Stop sensor and timer, reset UI
-                timerHandler.removeCallbacks(updateTimerThread);
-                sensorManager.unregisterListener(WalkingActivity.this);
-                elapsedTime = 0;
-                timerTextView.setText("00:00:00");
-                stepCountTextView.setText("Steps: 0");
-                distanceTextView.setText("Distance: 0 m");
-                caloriesTextView.setText("Calories Burned: 0 kcal");
-                isRunning = false;
-                startButton.setVisibility(View.VISIBLE);
-                pauseButton.setVisibility(View.GONE);
-                endButton.setVisibility(View.GONE);
-                stepsCounted = 0;
-            }
+        endButton.setOnClickListener(v -> {
+            stopSensors();
+            stopTimer();
+            resetUI();
+        });
+
+        finishButton.setOnClickListener(v -> {
+            showResults();
+            finish(); // Optionally finish the current activity
         });
     }
 
-    private void initStepCounter() {
-        // Check if step counter sensor is available
-        Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (stepSensor != null) {
-            isSensorPresent = true;
-            Toast.makeText(this, "Step sensor is available!", Toast.LENGTH_SHORT).show();
+    private void startSensors() {
+        sensorManager.registerListener(this, stepCounterSensor, SensorManager.SENSOR_DELAY_UI);
+        sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_UI);
+    }
+
+    private void stopSensors() {
+        sensorManager.unregisterListener(this);
+    }
+
+    private void startTimer() {
+        startTime = SystemClock.elapsedRealtime() - elapsedTime;
+        timerHandler.postDelayed(updateTimerThread, 0);
+        isRunning = true;
+    }
+
+    private void stopTimer() {
+        elapsedTime = SystemClock.elapsedRealtime() - startTime;
+        timerHandler.removeCallbacks(updateTimerThread);
+        isRunning = false;
+    }
+
+    private void switchButtons(boolean running) {
+        if (running) {
+            startPauseButton.setVisibility(View.GONE);
+            pauseButton.setVisibility(View.VISIBLE);
+            endButton.setVisibility(View.VISIBLE);
+            finishButton.setVisibility(View.VISIBLE);
         } else {
-            Toast.makeText(this, "Step sensor is not available!", Toast.LENGTH_SHORT).show();
+            startPauseButton.setVisibility(View.VISIBLE);
+            pauseButton.setVisibility(View.GONE);
+            endButton.setVisibility(View.GONE);
+            finishButton.setVisibility(View.GONE);
+
         }
     }
 
-    private void registerStepSensor() {
-        // Register step sensor listener
-        if (isSensorPresent) {
-            Sensor stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-            boolean sensorRegistered = sensorManager.registerListener(this, stepSensor, SensorManager.SENSOR_DELAY_UI);
-            if (sensorRegistered) {
-                Toast.makeText(WalkingActivity.this, "Step counter started.", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(WalkingActivity.this, "Failed to start step counter.", Toast.LENGTH_SHORT).show();
-            }
-        }
+    private void showResults() {
+        Intent intent = new Intent(WalkingActivity.this, ResultsActivity.class);
+        intent.putExtra("Duration", timerTextView.getText().toString());
+        intent.putExtra("Steps", stepCountTextView.getText().toString());
+        intent.putExtra("Calories", caloriesTextView.getText().toString());
+        intent.putExtra("Distance", distanceTextView.getText().toString());
+        startActivity(intent);
+    }
+
+    private void resetUI() {
+        elapsedTime = 0;
+        stepsCounted = 0;
+        timerTextView.setText("00:00:00");
+        stepCountTextView.setText("Steps: 0");
+        distanceTextView.setText("Distance: 0 km");
+        caloriesTextView.setText("Calories Burned: 0 kcal");
+        switchButtons(false);
+
     }
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Update step count and distance when sensor data changes
         if (event.sensor.getType() == Sensor.TYPE_STEP_COUNTER) {
-            if (stepsCounted == 0) {
-                stepsCounted = event.values[0];
-            }
-            float steps = event.values[0] - stepsCounted;
-            stepCountTextView.setText("Steps: " + (int) steps);
-            updateDistance((int) steps);
-            updateCalories((int) steps);
+            handleStepCounter(event);
+        } else if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            handleAccelerometer(event);
         }
     }
 
-    private void updateDistance(int steps) {
-        // Update distance based on step count
-        float distance = steps * STEP_LENGTH;  // Calculate distance
-        distanceTextView.setText("Distance: " + (int) distance + " m");
+    private void handleStepCounter(SensorEvent event) {
+        if (stepsCounted == 0) {
+            stepsCounted = event.values[0];
+        }
+        float steps = event.values[0] - stepsCounted;
+        updateUI((int) steps);
     }
 
-    private void updateCalories(int steps) {
-        // Calculate and update calories burned
-        float caloriesBurned = steps * 0.04f;  // Simple estimation: 0.04 calories per step
+    private void handleAccelerometer(SensorEvent event) {
+        float x = event.values[0];
+        float y = event.values[1];
+        float z = event.values[2];
+
+        if (Math.abs(x - lastX) > STEP_THRESHOLD || Math.abs(y - lastY) > STEP_THRESHOLD || Math.abs(z - lastZ) > STEP_THRESHOLD) {
+            stepsCounted++;
+            updateUI(1); // Update UI for each detected step
+        }
+
+        lastX = x;
+        lastY = y;
+        lastZ = z;
+    }
+
+    private void updateUI(int steps) {
+        stepCountTextView.setText("Steps: " + steps);
+        updateDistanceAndCalories(steps);
+    }
+
+    private void updateDistanceAndCalories(int steps) {
+        float distance = steps * STEP_LENGTH / 1000; // Distance in kilometers
+        distanceTextView.setText("Distance: " + String.format("%.2f", distance) + " km");
+        float caloriesBurned = steps * CALORIES_PER_STEP;
         caloriesTextView.setText("Calories Burned: " + String.format("%.1f", caloriesBurned) + " kcal");
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // This method is required by the SensorEventListener interface; you can leave it empty if you are not using it.
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        // Handle permission request result
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == ACTIVITY_RECOGNITION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initStepCounter();
-            } else {
-                Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-            }
-        }
+        // Not used currently
     }
 
     private Runnable updateTimerThread = new Runnable() {
@@ -184,33 +200,24 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
                 int hours = minutes / 60;
                 minutes %= 60;
                 timerTextView.setText(String.format("%02d:%02d:%02d", hours, minutes, seconds));
-                timerHandler.postDelayed(this, 500); // Corrected line here
+                timerHandler.postDelayed(this, 500);
             }
         }
     };
 
-
     @Override
     protected void onPause() {
-        // Pause sensor and timer when activity is paused
         super.onPause();
-        if (isSensorPresent) {
-            sensorManager.unregisterListener(this);
-        }
-        if (isRunning) {
-            elapsedTime = SystemClock.elapsedRealtime() - startTime;
-            timerHandler.removeCallbacks(updateTimerThread);
-        }
+        stopSensors();
+        stopTimer();
     }
 
     @Override
     protected void onResume() {
-        // Resume sensor and timer when activity is resumed
         super.onResume();
         if (isRunning) {
-            startTime = SystemClock.elapsedRealtime() - elapsedTime;
-            timerHandler.postDelayed(updateTimerThread, 0);
+            startSensors();
+            startTimer();
         }
     }
-
 }
