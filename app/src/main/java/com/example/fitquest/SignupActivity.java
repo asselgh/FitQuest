@@ -96,11 +96,12 @@ public class SignupActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Account created successfully.",
                                     Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignupActivity.this, MainActivity.class); //change this when we create the mainpage
+                            Intent intent = new Intent(SignupActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
-                            // Proceed to the next activity or perform any additional actions
-                            // For example, you might want to redirect the user to the login page
+
+                            // Write user data to the database
+                            writeNewUser(); // Move this line here
                         } else {
                             // If sign up fails, display a message to the user.
                             Toast.makeText(SignupActivity.this, "Failed to create account.",
@@ -108,7 +109,7 @@ public class SignupActivity extends AppCompatActivity {
                         }
                     }
                 });
-        writeNewUser();
+
 
     }
 
@@ -116,6 +117,12 @@ public class SignupActivity extends AppCompatActivity {
         User user = new User(editText1.getText().toString(),
                 editText2.getText().toString(), editText3.getText().toString());
 
-        mDatabase.child("users").child(user.getName()).setValue(user);
+        // Set user data under the generated key
+        DatabaseReference userRef = mDatabase.child("users").child(user.getName());
+        userRef.setValue(user);
+
+        // Add an empty "workouts" node under the user node
+        userRef.child("workouts").setValue(""); // Placeholder value, can be empty string or null
     }
+
 }

@@ -156,6 +156,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/stepsTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 1000 steps left"
@@ -177,6 +178,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/durationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 2 hours left"
@@ -200,6 +202,7 @@
                     android:textSize="18sp" />
 
                 <TextView
+                    android:id="@+id/caloriesTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="You have 200 calories left"

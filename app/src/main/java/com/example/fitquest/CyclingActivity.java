@@ -32,6 +32,9 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
     private Location lastLocation = null;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private static final float CALORIES_PER_KM = 50; // Average calories burned per kilometer for cycling
+    private String userEmail;
+    private String workoutType = "Cycling";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,9 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         checkLocationPermission();
+
+        userEmail = getIntent().getStringExtra("user_email");
+
 
         startPauseButton.setOnClickListener(v -> {
             if (!isRunning) {
@@ -84,6 +90,8 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
             public void onClick(View v) {
                 // Create an intent to start ResultsActivity
                 Intent intent = new Intent(CyclingActivity.this, ResultsActivity.class);
+                intent.putExtra("workout_type", workoutType);
+                intent.putExtra("user_email", userEmail); // Pass userEmail to ResultsActivity
                 intent.putExtra("Duration", timerTextView.getText().toString());
                 intent.putExtra("Calories", caloriesTextView.getText().toString());
                 intent.putExtra("Distance", distanceTextView.getText().toString());
