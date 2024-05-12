@@ -99,17 +99,27 @@ public class HomeActivity extends AppCompatActivity {
         final TextView caloriesTextView = findViewById(R.id.caloriesTextView);
 
         // Get today's date
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         String today = sdf.format(new Date());
 
+        Log.d("RetrieveWorkouts", "Today's date: " + today);
+
+        String encodedEmail = userEmail.replace(".", ",");
+        Log.d("RetrieveWorkouts", "Encoded email: " + encodedEmail);
+
         // Query workouts for today's date
-        mDatabase.child(userEmail).child("workouts").orderByChild("date_time").startAt(today).endAt(today + " 23:59:59")
+        mDatabase.child("users").child(encodedEmail).child("workouts")
+                .orderByChild("date_time")
+                .startAt(today)
+                .endAt(today + " - 23:59:59")
+
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 // Handle potential data type mismatch
+
                                 if (snapshot.hasChild("calories_burned")) {
                                     String caloriesBurnedStr = snapshot.child("calories_burned").getValue(String.class);
                                     if (caloriesBurnedStr != null) {
@@ -132,10 +142,11 @@ public class HomeActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-                        // Handle database error
+                        Log.e("Firebase", "Error reading data", databaseError.toException());
                     }
                 });
     }
+
     // Method to start activities with userEmail extra
     private void startActivityWithUserEmail(Class<?> cls) {
         Intent intent = new Intent(HomeActivity.this, cls);
