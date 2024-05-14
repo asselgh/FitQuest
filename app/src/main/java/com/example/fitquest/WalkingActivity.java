@@ -291,6 +291,8 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         String durationText = timerTextView.getText().toString();
         String caloriesText = caloriesTextView.getText().toString();
         String distanceText = distanceTextView.getText().toString();
+        int steps = Integer.parseInt(stepCountTextView.getText().toString().replaceAll("\\D", "")); // Extract steps
+
 
         // Extract numbers from text views
         int duration = extractNumber(durationText);
@@ -303,6 +305,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         values.put("duration", duration);
         values.put("calories", calories);
         values.put("distance", distance);
+        values.put("steps", steps);
         long newRowId = db.insert("workouts", null, values);
 
         if (newRowId == -1) {
