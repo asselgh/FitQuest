@@ -89,6 +89,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         });
 
         finishButton.setOnClickListener(v -> {
+            storeWorkoutData();
             showResults();
             createFinishNotification();
             finish(); // Optionally finish the current activity
@@ -133,10 +134,6 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
     private void showResults() {
         Intent intent = new Intent(WalkingActivity.this, ResultsActivity.class);
-        intent.putExtra("Duration", timerTextView.getText().toString());
-        intent.putExtra("Steps", stepCountTextView.getText().toString());
-        intent.putExtra("Calories", caloriesTextView.getText().toString());
-        intent.putExtra("Distance", distanceTextView.getText().toString());
         startActivity(intent);
     }
 
