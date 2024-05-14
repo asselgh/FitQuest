@@ -134,6 +134,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
     private void showResults() {
         Intent intent = new Intent(WalkingActivity.this, ResultsActivity.class);
+        intent.putExtra("workout_type", "Walking");
         startActivity(intent);
     }
 
