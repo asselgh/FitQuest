@@ -1,26 +1,18 @@
 package com.example.fitquest;
 
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ResultsActivity extends AppCompatActivity {
 
-    private DatabaseReference mDatabase;
-    private String userEmail;
+    private MyDBHelper dbHelper;
     private String workoutType;
 
     @Override
@@ -28,10 +20,9 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        dbHelper = new MyDBHelper(this);
 
-        // Retrieve the userEmail and workoutType from intent extras
-        userEmail = getIntent().getStringExtra("user_email");
+        // Retrieve the workoutType from intent extra
         workoutType = getIntent().getStringExtra("workout_type");
 
         TextView durationTextView = findViewById(R.id.durationTextView);
@@ -39,71 +30,55 @@ public class ResultsActivity extends AppCompatActivity {
         TextView caloriesTextView = findViewById(R.id.caloriesTextView);
         TextView distanceTextView = findViewById(R.id.distanceTextView);
 
-        // Get the passed values
-        String duration = getIntent().getStringExtra("Duration");
-        String steps = getIntent().getStringExtra("Steps");
-        String calories = getIntent().getStringExtra("Calories");
-        String distance = getIntent().getStringExtra("Distance");
+        // Get the last stored workout from the SQLite database
+        Map<String, Object> lastWorkout = getLastStoredWorkout();
 
-        String stepsNumric = extractNumber(steps); // Extract only number from steps
-        String caloriesNumric = extractNumber(calories); // Extract only number from calories
-        String distanceNumric = extractNumber(distance); // Extract only number from distance
+        if (lastWorkout != null) {
+            // Display the results in TextViews
+            // Get the values from the workout data map
+            int durationSeconds = (int) lastWorkout.get("duration");
+            int steps = (int) lastWorkout.get("steps");
+            float calories = (float) lastWorkout.get("calories");
+            float distance = (float) lastWorkout.get("distance");
 
-        storeDataInFirebase(duration, stepsNumric, caloriesNumric, distanceNumric);
+            // Format duration as "00:00" format
+            String formattedDuration = String.format("%02d:%02d", durationSeconds / 60, durationSeconds % 60);
 
-        durationTextView.setText(duration);
-        stepsTextView.setText(steps);
-        caloriesTextView.setText(calories);
-        distanceTextView.setText(distance);
-
-    }
-
-    private String extractNumber(String text) {
-        if (text != null) {
-            return text.replaceAll("\\D+", ""); // Remove all non-digits from the string
-        } else {
-            return "0"; // Handle null case with default value
+            // Set text for TextViews with prefixed labels
+            durationTextView.setText("Duration: " + formattedDuration);
+            stepsTextView.setText("Steps: " + steps);
+            caloriesTextView.setText("Calories Burned: " + calories);
+            distanceTextView.setText("Distance: " + distance);
         }
     }
 
-    private void storeDataInFirebase(String duration, String steps, String calories, String distance) {
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        String currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+    private Map<String, Object> getLastStoredWorkout() {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query("workouts", null, "workout_type = ?", new String[]{workoutType}, null, null, "_id DESC", "1");
 
-        // Reference to the users node
-        DatabaseReference usersRef = mDatabase.child("users");
+        if (cursor != null && cursor.moveToFirst()) {
+            // Create a Map to store workout data
+            Map<String, Object> workoutData = new HashMap<>();
 
-        // Query to find the user node based on email
-        Query query = usersRef.orderByChild("email").equalTo(userEmail);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Get the user node
-                    DataSnapshot userSnapshot = dataSnapshot.getChildren().iterator().next();
-                    String userId = userSnapshot.getKey();
+            // Extract workout data from the cursor
+            workoutData.put("duration", cursor.getInt(cursor.getColumnIndex("duration")));
+            workoutData.put("steps", cursor.getInt(cursor.getColumnIndex("steps")));
+            workoutData.put("calories", cursor.getFloat(cursor.getColumnIndex("calories")));
+            workoutData.put("distance", cursor.getFloat(cursor.getColumnIndex("distance")));
 
-                    // Reference to the workouts node under the user node
-                    DatabaseReference workoutsRef = usersRef.child(userId).child("workouts");
+            // Close the cursor and database
+            cursor.close();
+            db.close();
 
-                    // Create a new node for the current date and time to store workout data
-                    DatabaseReference workoutRef = workoutsRef.child(currentDate + " - " + currentTime);
-
-                    // Set values for workout data (numeric values only)
-                    workoutRef.child("workout_type").setValue(workoutType);
-                    workoutRef.child("date_time").setValue(currentDate + " " + currentTime);
-                    workoutRef.child("duration").setValue(duration);
-                    workoutRef.child("steps").setValue(Integer.parseInt(steps)); // Convert string to int for storage
-                    workoutRef.child("calories_burned").setValue(Integer.parseInt(calories));  // Convert string to int for storage
-                    workoutRef.child("distance").setValue(Double.parseDouble(distance)); // Convert string to double for storage
-                }
+            // Return the Map containing workout data
+            return workoutData;
+        } else {
+            // No workout found
+            if (cursor != null) {
+                cursor.close();
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        });
+            db.close();
+            return null;
+        }
     }
 }

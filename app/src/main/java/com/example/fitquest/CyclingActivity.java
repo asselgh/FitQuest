@@ -3,6 +3,7 @@ package com.example.fitquest;
 import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.database.sqlite.SQLiteDatabase;
+
 public class CyclingActivity extends AppCompatActivity implements LocationListener {
 
     private TextView timerTextView, distanceTextView, caloriesTextView;
@@ -29,7 +32,6 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
     private Handler timerHandler = new Handler();
     private Runnable timerRunnable;
     private long startTime = 0;
-    private long timeInMilliseconds = 0;
     private boolean isRunning = false;
     private float totalDistance = 0;
     private Location lastLocation = null;
@@ -91,13 +93,13 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Store the workout data in the database
+                storeWorkoutData();
+
                 // Create an intent to start ResultsActivity
                 Intent intent = new Intent(CyclingActivity.this, ResultsActivity.class);
                 intent.putExtra("workout_type", workoutType);
                 intent.putExtra("user_email", userEmail); // Pass userEmail to ResultsActivity
-                intent.putExtra("Duration", timerTextView.getText().toString());
-                intent.putExtra("Calories", caloriesTextView.getText().toString());
-                intent.putExtra("Distance", distanceTextView.getText().toString());
                 startActivity(intent);
 
                 // Optionally finish the current activity if you no longer need it
@@ -197,9 +199,50 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         notificationManager.notify(2, builder.build());
     }
 
+    private void storeWorkoutData() {
+        MyDBHelper dbHelper = new MyDBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
+        // Extracting numbers from the text views
+        String durationText = timerTextView.getText().toString();
+        String caloriesText = caloriesTextView.getText().toString();
+        String distanceText = distanceTextView.getText().toString();
 
+        // Extracting numbers from the strings
+        int duration = extractNumber(durationText);
+        float calories = extractFloatNumber(caloriesText);
+        float distance = extractFloatNumber(distanceText);
 
+        // Inserting data into the "workouts" table
+        ContentValues values = new ContentValues();
+        values.put("workout_type", workoutType);
+        values.put("duration", duration);
+        values.put("calories", calories);
+        values.put("distance", distance);
+        long newRowId = db.insert("workouts", null, values);
+
+        if (newRowId == -1) {
+            // Insertion failed
+            Toast.makeText(this, "Error storing workout data in the database", Toast.LENGTH_SHORT).show();
+        } else {
+            // Insertion successful
+            Toast.makeText(this, "Workout data stored successfully", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
+    // Helper method to extract integer from string
+    private int extractNumber(String text) {
+        String number = text.replaceAll("[^\\d]", ""); // Extract digits
+        return Integer.parseInt(number);
+    }
+
+    // Helper method to extract float from string
+    private float extractFloatNumber(String text) {
+        String number = text.replaceAll("[^\\d.]", ""); // Extract digits and dot
+        return Float.parseFloat(number);
+    }
 
     @Override
     public void onProviderEnabled(String provider) {

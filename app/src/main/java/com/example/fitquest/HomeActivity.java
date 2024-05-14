@@ -2,6 +2,8 @@ package com.example.fitquest;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -43,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
         final TextView stepsTextView = findViewById(R.id.stepsTextView);
         final TextView durationTextView = findViewById(R.id.durationTextView);
 
-
         // Fetch user name from database
         mDatabase.orderByChild("email").equalTo(userEmail).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -65,9 +66,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        // Call retrieveWorkoutsData to fetch workout data
-        retrieveWorkoutsData();
+        // Calculate steps left for today's goal
+        int stepsLeft = calculateStepsLeftForToday();
 
+        // Update stepsTextView
+        stepsTextView.setText("You have " + stepsLeft + " steps left");
+
+        // Initialize bottom navigation view
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
@@ -94,57 +99,37 @@ public class HomeActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
     }
 
-    // Method to retrieve workouts data
-    private void retrieveWorkoutsData() {
-        final TextView caloriesTextView = findViewById(R.id.caloriesTextView);
-
+    // Method to calculate steps left for today's goal
+    private int calculateStepsLeftForToday() {
         // Get today's date
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        String today = sdf.format(new Date());
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-        Log.d("RetrieveWorkouts", "Today's date: " + today);
+        // Initialize DBHelper
+        MyDBHelper dbHelper = new MyDBHelper(this);
 
-        String encodedEmail = userEmail.replace(".", ",");
-        Log.d("RetrieveWorkouts", "Encoded email: " + encodedEmail);
+        // Initialize SQLiteDatabase
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        // Query workouts for today's date
-        mDatabase.child("users").child(encodedEmail).child("workouts")
-                .orderByChild("date_time")
-                .startAt(today)
-                .endAt(today + " - 23:59:59")
+        // Query to get sum of steps for today's workouts
+        Cursor cursor = db.rawQuery("SELECT SUM(steps) FROM workouts WHERE date_time LIKE ?", new String[]{currentDate + "%"});
 
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                // Handle potential data type mismatch
+        // Get sum of steps
+        int totalSteps = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            totalSteps = cursor.getInt(0);
+            cursor.close();
+        }
 
-                                if (snapshot.hasChild("calories_burned")) {
-                                    String caloriesBurnedStr = snapshot.child("calories_burned").getValue(String.class);
-                                    if (caloriesBurnedStr != null) {
-                                        try {
-                                            int caloriesBurned = Integer.parseInt(caloriesBurnedStr);
-                                            totalCaloriesBurned += caloriesBurned;
-                                        } catch (NumberFormatException e) {
-                                            // Handle parsing error
-                                            Log.w("HomeActivity", "Failed to parse calories_burned to integer", e);
-                                        }
-                                    }
-                                }
-                            }
-                            int caloriesRemaining = 500 - totalCaloriesBurned;
-                            caloriesTextView.setText(String.format("You have %d calories remaining today", caloriesRemaining));
-                        } else {
-                            caloriesTextView.setText("No workouts recorded today");
-                        }
-                    }
+        // Close SQLiteDatabase
+        db.close();
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Log.e("Firebase", "Error reading data", databaseError.toException());
-                    }
-                });
+        // Calculate steps left
+        int stepsLeft = 5000 - totalSteps;
+        if (stepsLeft < 0) {
+            stepsLeft = 0; // Ensure stepsLeft is not negative
+        }
+
+        return stepsLeft;
     }
 
     // Method to start activities with userEmail extra
