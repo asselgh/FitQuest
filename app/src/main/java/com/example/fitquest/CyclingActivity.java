@@ -1,6 +1,9 @@
 package com.example.fitquest;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -121,6 +124,8 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         timerHandler.postDelayed(timerRunnable, 0);
         lastLocation = null;
         totalDistance = 0;
+
+        createStartNotification();
     }
 
     private void pauseCycling() {
@@ -134,6 +139,7 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         isRunning = false;
         timerHandler.removeCallbacks(timerRunnable);
         locationManager.removeUpdates(this);
+        createFinishNotification();
         resetUI();
     }
 
@@ -162,6 +168,38 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         float caloriesBurned = distance * CALORIES_PER_KM;
         caloriesTextView.setText(String.format("Calories Burned: %.1f kcal", caloriesBurned));
     }
+
+
+    private void createStartNotification() {
+        Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
+                .setContentTitle("FitQuest")
+                .setContentText("Your cycling session has started")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
+    }
+
+    private void createFinishNotification() {
+        String distanceString = String.format("%.2f", totalDistance); // Using the totalDistance variable
+        String caloriesString = caloriesTextView.getText().toString(); // Using the text from the caloriesTextView
+
+        String notificationMessage = "Finished cycling session, Distance: " + distanceString + " km, Calories: " + caloriesString;
+
+        Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
+                .setContentTitle("FitQuest")
+                .setContentText(notificationMessage)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(2, builder.build());
+    }
+
+
+
+
 
     @Override
     public void onProviderEnabled(String provider) {

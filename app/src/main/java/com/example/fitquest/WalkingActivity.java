@@ -13,6 +13,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.graphics.Color;
+
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class WalkingActivity extends AppCompatActivity implements SensorEventListener {
@@ -34,6 +41,8 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walking);
+
+        createNotificationChannel();
 
         stepCountTextView = findViewById(R.id.stepsTextView);
         timerTextView = findViewById(R.id.timerTextView);
@@ -62,6 +71,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
                 startSensors();
                 startTimer();
                 switchButtons(true);
+                createNotification();
             }
         });
 
@@ -79,6 +89,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
         finishButton.setOnClickListener(v -> {
             showResults();
+            createFinishNotification();
             finish(); // Optionally finish the current activity
         });
     }
@@ -204,6 +215,63 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
             }
         }
     };
+
+    private void createNotificationChannel() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "fitquest_channel",
+                    "FitQuest Notifications",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription("Channel for FitQuest app notifications");
+            channel.enableLights(true);
+            channel.setLightColor(Color.BLUE);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void createNotification() {
+        Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
+                .setContentTitle("FitQuest")
+                .setContentText("Your walking session has started")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
+    }
+
+    private void createFinishNotification() {
+        long elapsedMillis = SystemClock.elapsedRealtime() - startTime;
+        int seconds = (int) (elapsedMillis / 1000);
+        int minutes = seconds / 60;
+        seconds %= 60;
+        int hours = minutes / 60;
+        minutes %= 60;
+
+        String timeString = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        String distanceString = distanceTextView.getText().toString();
+        String caloriesString = caloriesTextView.getText().toString();
+
+        String notificationMessage = "Finished walking session at " + timeString + ", " + distanceString + ", " + caloriesString;
+
+        Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
+                .setContentTitle("FitQuest")
+                .setContentText(notificationMessage)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(2, builder.build());
+    }
+
+
+
+
+
+
 
     @Override
     protected void onPause() {

@@ -2,6 +2,21 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="CyclingActivity">
+        <State />
+      </entry>
+      <entry key="HomeActivity">
+        <State />
+      </entry>
+      <entry key="ProfileActivity">
+        <State />
+      </entry>
+      <entry key="StatusActivity">
+        <State />
+      </entry>
+      <entry key="WalkingActivity">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>

@@ -1,6 +1,9 @@
 package com.example.fitquest;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -68,6 +71,7 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
                 pauseButton.setVisibility(View.VISIBLE);
                 endButton.setVisibility(View.VISIBLE);
                 finishButton.setVisibility(View.VISIBLE);
+                createStartNotification();
             }
         });
 
@@ -99,6 +103,8 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
                 intent.putExtra("Distance", distanceTextView.getText().toString());
                 startActivity(intent);
 
+                // Create a notification for the finished running session
+                createFinishNotification();
                 // Optionally finish the current activity if you no longer need it
                 finish();
             }
@@ -159,6 +165,46 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
             }
         }
     };
+
+    private void createStartNotification() {
+        Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
+                .setContentTitle("FitQuest")
+                .setContentText("Your running session has started")
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
+    }
+
+
+
+    private void createFinishNotification() {
+        long elapsedMillis = SystemClock.elapsedRealtime() - startTime;
+        int seconds = (int) (elapsedMillis / 1000);
+        int minutes = seconds / 60;
+        seconds %= 60;
+        int hours = minutes / 60;
+        minutes %= 60;
+
+        String timeString = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        String distanceString = distanceTextView.getText().toString();
+        String caloriesString = caloriesTextView.getText().toString();
+
+        String notificationMessage = "Finished running session at " + timeString +
+                ", " + distanceString +
+                ", " + caloriesString;
+
+        Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
+                .setContentTitle("FitQuest")
+                .setContentText(notificationMessage)
+                .setSmallIcon(R.drawable.ic_notification)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(2, builder.build());
+    }
+
 
     @Override
     protected void onPause() {
