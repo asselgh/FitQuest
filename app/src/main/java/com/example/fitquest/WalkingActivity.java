@@ -1,6 +1,8 @@
 package com.example.fitquest;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -12,13 +14,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import androidx.appcompat.app.AppCompatActivity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.graphics.Color;
-
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -267,12 +268,6 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         notificationManager.notify(2, builder.build());
     }
 
-
-
-
-
-
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -288,4 +283,50 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
             startTimer();
         }
     }
+
+    // New method for storing workout data
+    private void storeWorkoutData() {
+        MyDBHelper dbHelper = new MyDBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Extract data from UI elements
+        String durationText = timerTextView.getText().toString();
+        String caloriesText = caloriesTextView.getText().toString();
+        String distanceText = distanceTextView.getText().toString();
+
+        // Extract numbers from text views
+        int duration = extractNumber(durationText);
+        float calories = extractFloatNumber(caloriesText);
+        float distance = extractFloatNumber(distanceText);
+
+        // Insert data into "workouts" table
+        ContentValues values = new ContentValues();
+        values.put("workout_type", "Walking");
+        values.put("duration", duration);
+        values.put("calories", calories);
+        values.put("distance", distance);
+        long newRowId = db.insert("workouts", null, values);
+
+        if (newRowId == -1) {
+            // Insertion failed
+            Toast.makeText(this, "Error storing workout data in the database", Toast.LENGTH_SHORT).show();
+        } else {
+            // Insertion successful
+            Toast.makeText(this, "Workout data stored successfully", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
+    // Helper methods for extracting numbers (same as CyclingActivity)
+    private int extractNumber(String text) {
+        String number = text.replaceAll("[^\\d]", ""); // Extract digits
+        return Integer.parseInt(number);
+    }
+
+    private float extractFloatNumber(String text) {
+        String number = text.replaceAll("[^\\d.]", ""); // Extract digits and dot
+        return Float.parseFloat(number);
+    }
 }
+

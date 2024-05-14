@@ -46,7 +46,12 @@ public class ResultsActivity extends AppCompatActivity {
 
             // Set text for TextViews with prefixed labels
             durationTextView.setText("Duration: " + formattedDuration);
-            stepsTextView.setText("Steps: " + steps);
+            // Update stepsTextView based on workout_type
+            if (!workoutType.equals("Cycling")) {
+                stepsTextView.setText("Steps: " + steps);
+            } else {
+                stepsTextView.setText(""); // Empty text if workout_type is "Cycling"
+            }
             caloriesTextView.setText("Calories Burned: " + calories);
             distanceTextView.setText("Distance: " + distance);
         }
