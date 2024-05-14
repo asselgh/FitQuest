@@ -247,14 +247,13 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         int seconds = (int) (elapsedMillis / 1000);
         int minutes = seconds / 60;
         seconds %= 60;
-        int hours = minutes / 60;
-        minutes %= 60;
 
-        String timeString = String.format("%d:%02d:%02d", hours, minutes, seconds);
+        String timeString = String.format("%02d:%02d", minutes, seconds);
         String distanceString = distanceTextView.getText().toString();
         String caloriesString = caloriesTextView.getText().toString();
+        String stepsString = stepCountTextView.getText().toString();
 
-        String notificationMessage = "Finished walking session at " + timeString + ", " + distanceString + ", " + caloriesString;
+        String notificationMessage = "Finished walking session at " + timeString + ", " + distanceString + ", " + stepsString;
 
         Notification.Builder builder = new Notification.Builder(this, "fitquest_channel")
                 .setContentTitle("FitQuest")
@@ -265,6 +264,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(2, builder.build());
     }
+
 
     @Override
     protected void onPause() {
