@@ -213,12 +213,13 @@ public class CyclingActivity extends AppCompatActivity implements LocationListen
         float calories = extractFloatNumber(caloriesText);
         float distance = extractFloatNumber(distanceText);
 
-        // Inserting data into the "workouts" table
+// Inserting data into the "workouts" table
         ContentValues values = new ContentValues();
         values.put("workout_type", workoutType);
         values.put("duration", duration);
         values.put("calories", calories);
         values.put("distance", distance);
+        values.put("user_email", userEmail); // Add user email
         long newRowId = db.insert("workouts", null, values);
 
         if (newRowId == -1) {

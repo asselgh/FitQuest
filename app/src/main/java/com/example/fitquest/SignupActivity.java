@@ -24,6 +24,7 @@ import android.view.View;
 
 public class SignupActivity extends AppCompatActivity {
 
+    private MyDBHelper dbHelper;
     private DatabaseReference mDatabase;
 
     private FirebaseAuth mAuth;
@@ -34,6 +35,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_layout);
 
+        dbHelper = new MyDBHelper(this);
         mAuth = FirebaseAuth.getInstance();
         editText1 = findViewById(R.id.edit_id1);
         editText2 = findViewById(R.id.edit_id2);
@@ -92,6 +94,9 @@ public class SignupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
+                            //add here the inserting to user table
+
                             // Sign up success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
                             Toast.makeText(SignupActivity.this, "Account created successfully.",
@@ -116,6 +121,10 @@ public class SignupActivity extends AppCompatActivity {
     public void writeNewUser() {
         User user = new User(editText1.getText().toString(),
                 editText2.getText().toString(), editText3.getText().toString());
+
+        String name = editText1.getText().toString();
+        String email = editText2.getText().toString();
+        dbHelper.insertUser(name, email); // Pass both name and email parameters
 
         // Set user data under the generated key
         DatabaseReference userRef = mDatabase.child("users").child(user.getName());

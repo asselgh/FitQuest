@@ -84,11 +84,12 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/tasksTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textAlignment="center"
-                android:text="You have completed 3 out of 5 tasks today"
+                android:text="You have completed 0 out of 3 tasks today"
                 android:textColor="#666"
                 android:textSize="15dp" />
         </LinearLayout>
@@ -111,10 +112,11 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/pointsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="You have earned 100 points today"
+                android:text="You have earned 0 points today"
                 android:textAlignment="center"
                 android:textColor="#666"
                 android:textSize="15sp" />
@@ -173,15 +175,15 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Time"
+                    android:text="Distance"
                     android:textColor="#1565C0"
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/durationTextView"
+                    android:id="@+id/distanceTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="You have 2 hours left"
+                    android:text="You have 5 km left"
                     android:textColor="#666"
                     android:padding="10dp"
                     android:textSize="14sp" />

@@ -31,6 +31,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
     private Handler timerHandler = new Handler();
     private long startTime = 0;
     private long elapsedTime = 0;
+    private String userEmail;
     private boolean isRunning = false;
     private float stepsCounted = 0;
     private float lastX, lastY, lastZ;
@@ -53,6 +54,8 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
         finishButton = findViewById(R.id.finishButton);
+
+        userEmail = getIntent().getStringExtra("user_email");
 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
@@ -134,6 +137,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
 
     private void showResults() {
         Intent intent = new Intent(WalkingActivity.this, ResultsActivity.class);
+        intent.putExtra("user_email", userEmail);
         intent.putExtra("workout_type", "Walking");
         startActivity(intent);
     }
@@ -306,6 +310,7 @@ public class WalkingActivity extends AppCompatActivity implements SensorEventLis
         values.put("calories", calories);
         values.put("distance", distance);
         values.put("steps", steps);
+        values.put("user_email", userEmail); // Add user email
         long newRowId = db.insert("workouts", null, values);
 
         if (newRowId == -1) {

@@ -3,9 +3,11 @@ package com.example.fitquest;
 import android.Manifest;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -30,6 +32,7 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
     private long startTime = 0;
     private long elapsedTime = 0;
     private boolean isRunning = false;
+    private String userEmail;
     private float stepsCounted = 0;
     private static final float STEP_LENGTH = 0.762f; // Average step length in meters
     private static final float CALORIES_PER_STEP = 0.07f; // Adjusted calorie burn rate per step for running
@@ -48,6 +51,9 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
         pauseButton = findViewById(R.id.pauseButton);
         endButton = findViewById(R.id.endButton);
         finishButton = findViewById(R.id.finishButton);
+
+        // Retrieve the user's email from the intent extras
+        userEmail = getIntent().getStringExtra("user_email");
 
         // Get sensor manager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -95,12 +101,13 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
         finishButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                storeWorkoutData();
+
                 // Create an intent to start ResultsActivity
                 Intent intent = new Intent(RunningActivity.this, ResultsActivity.class);
-                intent.putExtra("Duration", timerTextView.getText().toString());
-                intent.putExtra("Steps", stepCountTextView.getText().toString());
-                intent.putExtra("Calories", caloriesTextView.getText().toString());
-                intent.putExtra("Distance", distanceTextView.getText().toString());
+                intent.putExtra("user_email", userEmail);
+                intent.putExtra("workout_type", "Running");
                 startActivity(intent);
 
                 // Create a notification for the finished running session
@@ -123,6 +130,54 @@ public class RunningActivity extends AppCompatActivity implements SensorEventLis
         pauseButton.setVisibility(View.GONE);
         endButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.VISIBLE);
+    }
+
+    private void storeWorkoutData() {
+        MyDBHelper dbHelper = new MyDBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        // Extract data from UI elements
+        String durationText = timerTextView.getText().toString();
+        String caloriesText = caloriesTextView.getText().toString();
+        String distanceText = distanceTextView.getText().toString();
+        int steps = Integer.parseInt(stepCountTextView.getText().toString().replaceAll("\\D", "")); // Extract steps
+
+
+        // Extract numbers from text views
+        int duration = extractNumber(durationText);
+        float calories = extractFloatNumber(caloriesText);
+        float distance = extractFloatNumber(distanceText);
+
+        // Insert data into "workouts" table
+        ContentValues values = new ContentValues();
+        values.put("workout_type", "Running");
+        values.put("duration", duration);
+        values.put("calories", calories);
+        values.put("distance", distance);
+        values.put("steps", steps);
+        values.put("user_email", userEmail); // Add user email
+        long newRowId = db.insert("workouts", null, values);
+
+        if (newRowId == -1) {
+            // Insertion failed
+            Toast.makeText(this, "Error storing workout data in the database", Toast.LENGTH_SHORT).show();
+        } else {
+            // Insertion successful
+            Toast.makeText(this, "Workout data stored successfully", Toast.LENGTH_SHORT).show();
+        }
+
+        db.close();
+    }
+
+    // Helper methods for extracting numbers (same as CyclingActivity)
+    private int extractNumber(String text) {
+        String number = text.replaceAll("[^\\d]", ""); // Extract digits
+        return Integer.parseInt(number);
+    }
+
+    private float extractFloatNumber(String text) {
+        String number = text.replaceAll("[^\\d.]", ""); // Extract digits and dot
+        return Float.parseFloat(number);
     }
 
     @Override

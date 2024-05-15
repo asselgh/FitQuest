@@ -14,11 +14,16 @@ public class ResultsActivity extends AppCompatActivity {
 
     private MyDBHelper dbHelper;
     private String workoutType;
+    private String userEmail;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
+        // Retrieve the user's email from the intent extras
+        userEmail = getIntent().getStringExtra("user_email");
 
         dbHelper = new MyDBHelper(this);
 
@@ -53,7 +58,7 @@ public class ResultsActivity extends AppCompatActivity {
                 stepsTextView.setText(""); // Empty text if workout_type is "Cycling"
             }
             caloriesTextView.setText("Calories Burned: " + calories);
-            distanceTextView.setText("Distance: " + distance);
+            distanceTextView.setText("Distance: " + distance + " km");
         }
     }
 
